@@ -1,0 +1,105 @@
+package ui_test;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.GeckoDriverService.Builder;
+import org.openqa.selenium.interactions.Actions;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class trello {
+
+	public static void main(String[] args) throws InterruptedException {
+		
+		WebDriverManager.chromedriver().setup();
+		ChromeDriver driver = new ChromeDriver();
+		driver.get("https://trello.com/");
+		driver.manage().window().maximize();
+		
+		WebElement loginbtn = driver.findElement(By.xpath("//*[@id=\"BXP-APP\"]/header[1]/div/div[1]/div[2]/a[1]"));
+		loginbtn.click();
+		
+		WebElement username = driver.findElement(By.id("user"));
+		username.sendKeys("manishcb1998@gmail.com");
+		
+		WebElement continuee = driver.findElement(By.id("login"));
+		continuee.click();
+		Thread.sleep(2000);
+		
+		WebElement password = driver.findElement(By.name("password"));
+		password.sendKeys("Manish@1998");
+		
+		WebElement loginbtn1 = driver.findElement(By.xpath("//*[@id=\'login-submit\']"));
+		loginbtn1.click();
+		Thread.sleep(2000);
+		
+		WebElement createboard = driver.findElement(By.xpath("//*[@id=\'header\']/div[2]/div/div[2]/button"));
+		createboard.click();
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("/html/body/div[3]/div/section/div/div/nav/ul/li[1]/button")).click();
+		Thread.sleep(2000);
+		
+		WebElement boardtitle = driver.findElement(By.xpath("/html/body/div[3]/div/section/div/form/div[1]/label/input"));
+		boardtitle.sendKeys("Test6");
+		driver.findElement(By.xpath("/html/body/div[3]/div/section/div/form/button")).click();
+		Thread.sleep(2000);
+		
+		String FirstList = "List A";
+		String SecondList = "List B";
+		
+		WebElement listA = driver.findElement(By.xpath("//*[@id=\"board\"]/div"));
+		listA.click();
+		driver.findElement(By.xpath("//*[@id=\'board\']/div/form/input")).sendKeys(FirstList);
+		driver.findElement(By.xpath("//*[@id='board']/div/form/div/input")).click();
+		
+		
+		WebElement listB = driver.findElement(By.xpath("//*[@id=\"board\"]/div[2]/form/input"));
+		listB.sendKeys(SecondList);
+		driver.findElement(By.xpath("//*[@id='board']/div[2]/form/div/input")).click();
+		
+		WebElement addCardA = driver.findElement(By.xpath("//*[@id=\"board\"]/div[1]/div/div[3]/a"));
+		addCardA.click();
+		Thread.sleep(2000);
+		String List_A_cardValue = "Welcome to Trello";
+		driver.findElement(By.xpath("//*[@id=\'board\']/div[1]/div/div[2]/div/div[1]/div/textarea")).sendKeys(List_A_cardValue);
+		driver.findElement(By.xpath("//*[@id=\'board\']/div[1]/div/div[2]/div/div[2]/div[1]/input")).click();
+		
+		WebElement List_A = driver.findElement(By.xpath("//*[@id='board']/div[1]/div/div[2]/a"));
+		 
+		WebElement List_B = driver.findElement(By.xpath("//*[@id='board']/div[2]/div/div[3]/a"));	
+		
+		Thread.sleep(2000);
+		Actions builder = new Actions(driver);
+		builder.dragAndDrop(List_A, List_B).perform();
+		Thread.sleep(2000);
+		WebElement transferd_text = driver.findElement(By.xpath("//*[@id=\'board\']/div[2]/div/div[2]/a/div[3]/span"));
+		
+		String textTo = transferd_text.getText();
+
+		if(textTo.equals(List_A_cardValue)) {
+			System.out.println(textTo);
+			System.out.println(List_A_cardValue);
+			System.out.println("PASS: Source is dropped to target as expected");
+			Thread.sleep(2000);
+		}else {
+			System.out.println(textTo);
+			System.out.println(List_A_cardValue);
+			System.out.println("FAIL: Source couldn't be dropped to target as expected");
+			Thread.sleep(2000);
+		}
+		
+		
+		
+		driver.findElement(By.xpath("//*[@id=\'header\']/div[3]/div[5]/button/div/span")).click();
+		WebElement Logout = driver.findElement(By.xpath("/html/body/div[3]/div/section/div/div/div/ul[3]/li[2]/button/span"));
+		Logout.click();
+		
+		
+		Thread.sleep(2000);
+		driver.quit();
+		
+
+	}
+
+}
